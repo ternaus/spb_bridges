@@ -2,8 +2,10 @@
 @author: Vladimir Iglovikov
 """
 from __future__ import division
+
 import datetime
 import os
+
 import cv2
 
 
@@ -43,16 +45,14 @@ print '[{}] Splitting'.format(str(datetime.datetime.now()))
 up_filenames = os.listdir(up_path)
 down_filenames = os.listdir(down_path)
 
+val_up_filenames = [x for x in up_filenames if ('2016-07-18' in x) or ('2016-07-19' in x) or ('2016-07-20' in x)]
+val_down_filenames = [x for x in down_filenames if ('2016-07-18' in x) or ('2016-07-19' in x) or ('2016-07-20' in x)]
 
-val_up_filenames = [x for x in up_filenames if ('2016-07-20' in x) or ('2016-07-21' in x)]
-val_down_filenames = [x for x in down_filenames if ('2016-07-20' in x) or ('2016-07-21' in x)]
-
-test_up_filenames = [x for x in up_filenames if ('2016-07-22' in x) or ('2016-07-23' in x)]
-test_down_filenames = [x for x in down_filenames if ('2016-07-22' in x) or ('2016-07-23' in x)]
+test_up_filenames = [x for x in up_filenames if ('2016-07-21' in x) or ('2016-07-22' in x) or ('2016-07-23' in x)]
+test_down_filenames = [x for x in down_filenames if ('2016-07-21' in x) or ('2016-07-22' in x) or ('2016-07-23' in x)]
 
 train_up_filenames = set(up_filenames).difference(set(val_up_filenames)).difference(set(test_up_filenames))
 train_down_filenames = set(down_filenames).difference(set(val_down_filenames)).difference(set(test_down_filenames))
-
 
 print '[{}] Copying train'.format(str(datetime.datetime.now()))
 os.mkdir(train_path)
