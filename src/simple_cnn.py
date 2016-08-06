@@ -15,7 +15,7 @@ import os
 
 from keras.preprocessing.image import ImageDataGenerator
 from keras.callbacks import History
-import pickle
+import pandas as pd
 
 img_rows = 64
 img_cols = 64
@@ -42,7 +42,6 @@ def simple_cnn():
 
 def save_model(model, suffix):
     json_string = model.to_json()
-
     json_name = 'architecture_' + suffix + '.json'
     weights_name = 'model_weights_' + suffix + '.h5'
     open(json_name, 'w').write(json_string)
@@ -50,15 +49,12 @@ def save_model(model, suffix):
 
 
 def save_history(history, suffix):
-    filename = open('history_' + suffix + '.pkl')
-    pickle.dump(history, filename)
-    filename.close()
+    filename = 'history_' + suffix + '.csv'
+    pd.DataFrame(history.history).to_csv(filename, index=False)
 
 
 if __name__ == '__main__':
     batch_size = 128
-    num_train = 43539
-    num_val = 14513
 
     history = History()
 
@@ -69,16 +65,15 @@ if __name__ == '__main__':
     test_path = os.path.join(data_path, 'test')
 
     train_datagen = ImageDataGenerator(
-            rescale=1. / 255,
+            rescale=1.0 / 255,
     )
 
-    val_datagen = ImageDataGenerator(rescale=1. / 255)
+    val_datagen = ImageDataGenerator(rescale=1.0 / 255)
 
     train_generator = train_datagen.flow_from_directory(
         train_path,
         target_size=(img_rows, img_cols),
         batch_size=batch_size,
-        # color_mode="grayscale",
         class_mode='binary')
 
     validation_generator = val_datagen.flow_from_directory(
@@ -94,16 +89,26 @@ if __name__ == '__main__':
 
     model.fit_generator(
         train_generator,
-        samples_per_epoch=num_train,
-        nb_epoch=20,
+        samples_per_epoch=train_generator.N,
+        nb_epoch=10,
         validation_data=validation_generator,
-        nb_val_samples=num_val,
+        nb_val_samples=validation_generator.N,
         callbacks=[history]
     )
 
     print '[{}] Saving model'.format(str(datetime.datetime.now()))
     now = datetime.datetime.now()
     suffix = str(now.strftime("%Y-%m-%d-%H-%M"))
-
     save_model(model, suffix)
+
     print '[{}] Saving history'.format(str(datetime.datetime.now()))
+    save_history(history, suffix)
+
+    print '[{}] Evaluating on test set'.format(str(datetime.datetime.now()))
+    test_datagen = ImageDataGenerator(rescale=1.0 / 255)
+    test_generator = test_datagen.flow_from_directory(
+        test_path,
+        target_size=(img_rows, img_cols),
+        class_mode='binary')
+
+    print model.evaluate_generator(test_generator, test_generator.N)
