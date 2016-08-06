@@ -39,11 +39,17 @@ up_filenames = os.listdir(up_path)
 down_filenames = os.listdir(down_path)
 
 print '[{}] Cuting test'.format(str(datetime.datetime.now()))
-train_up_filenames, test_up_filenames = train_test_split(up_filenames, test_size=0.2, random_state=random_state)
-train_down_filenames, test_down_filenames = train_test_split(down_filenames, test_size=0.2, random_state=random_state)
+train_up_filenames, test_up_filenames = train_test_split(up_filenames,
+                                                         test_size=0.2,
+                                                         random_state=random_state)
+train_down_filenames, test_down_filenames = train_test_split(down_filenames,
+                                                             test_size=0.2,
+                                                             random_state=random_state)
 
-print '[{}] Cuting test'.format(str(datetime.datetime.now()))
-train_up_filenames, val_up_filenames = train_test_split(train_up_filenames, test_size=0.25, random_state=random_state)
+print '[{}] Cuting validation'.format(str(datetime.datetime.now()))
+train_up_filenames, val_up_filenames = train_test_split(train_up_filenames,
+                                                        test_size=0.25,
+                                                        random_state=random_state)
 train_down_filenames, val_down_filenames = train_test_split(train_down_filenames, test_size=0.25,
                                                             random_state=random_state)
 
