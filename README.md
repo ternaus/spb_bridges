@@ -1,4 +1,4 @@
-# NN for stae of the Bridge of the Alwxander Nevsky
+# NN for stae of the Bridge of the Alexander Nevsky
 
 source code that supports post at Habrahabr.tu => https://habrahabr.ru/post/307218/
 
