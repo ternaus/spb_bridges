@@ -1,4 +1,4 @@
-# NN for state of the Bridge of the Alexander Nevsky
+# NN for state of the Alexander Nevsky Bridge
 
 source code that supports post at Habrahabr.tu => https://habrahabr.ru/post/307218/
 
